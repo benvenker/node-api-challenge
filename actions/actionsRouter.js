@@ -1,5 +1,7 @@
 const express = require('express');
 const actions = require('../data/helpers/actionModel');
+const { validateProjectId } = require('../middleware/validateProjectId');
+
 const router = express.Router();
 
 // Get all the actions
@@ -14,28 +16,28 @@ router.get('/', (req, res) => {
     );
 });
 
-// Add a new project
-router.post('/', (req, res) => {
-  const project = req.body;
+// Add a new action
+router.post('/', validateProjectId(), (req, res) => {
+  const action = req.body;
   return actions
-    .insert(project)
-    .then(actions => {
-      res.status(200).json(actions);
+    .insert(action)
+    .then(action => {
+      res.status(200).json(action);
     })
     .catch(err =>
       res.status(500).json({ message: 'Error retrieving actions.' })
     );
 });
 
-// Update an existing project
+// Update an existing action
 router.put('/:id', (req, res) => {
-  const project = req.params.id;
+  const action = req.params.id;
   const changes = req.body;
 
   return actions
-    .update(project, changes)
-    .then(project => {
-      res.status(200).json(project);
+    .update(action, changes)
+    .then(action => {
+      res.status(200).json(action);
     })
     .catch(err =>
       res.status(500).json({ message: 'Error retrieving actions.' })
@@ -47,14 +49,13 @@ router.delete('/:id', (req, res) => {
   const project = req.params.id;
 
   return actions
-    .remove(project)
-    .then(project => {
-      res.status(200).json(project);
+    .remove(action)
+    .then(action => {
+      res.status(200).json(action);
     })
     .catch(err =>
       res.status(500).json({ message: 'Error retrieving actions.' })
     );
 });
-module.exports = router;
 
 module.exports = router;
