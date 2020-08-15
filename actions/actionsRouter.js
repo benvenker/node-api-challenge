@@ -1,6 +1,7 @@
 const express = require('express');
 const actions = require('../data/helpers/actionModel');
 const { validateProjectId } = require('../middleware/validateProjectId');
+const { validateActionId } = require('../middleware/validateActionId');
 
 const router = express.Router();
 
@@ -36,38 +37,26 @@ router.post('/', validateProjectId(), (req, res) => {
 });
 
 // Update an existing action
-router.put('/:id', (req, res) => {
+router.put('/:id', validateActionId(), (req, res) => {
   const action = req.params.id;
   const changes = req.body;
 
   return actions
     .update(action, changes)
     .then(action => {
-      if (action) {
-        res.status(200).json(action);
-      } else {
-        res
-          .status(400)
-          .json({ message: ' action to update could not be found' });
-      }
+      res.status(200).json(action);
     })
     .catch(err => res.status(500).json({ message: 'Error updating action.' }));
 });
 
 // Delete an existing project
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateActionId(), (req, res) => {
   const action = req.params.id;
 
   return actions
     .remove(action)
     .then(action => {
-      if (action) {
-        res.status(200).json(action);
-      } else {
-        res
-          .status(400)
-          .json({ message: ' actions to delete could not be found' });
-      }
+      res.status(200).json(action);
     })
     .catch(err => res.status(500).json({ message: 'Error deleting actions.' }));
 });
