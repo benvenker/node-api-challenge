@@ -15,6 +15,19 @@ router.get('/', (req, res) => {
     );
 });
 
+// Get a project by ID
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  return projects
+    .get(id)
+    .then(project => {
+      res.status(200).json(project);
+    })
+    .catch(err =>
+      res.status(500).json({ message: 'Error retrieving project.' })
+    );
+});
+
 // Get all the actiosn for a project
 router.get('/:id/actions', (req, res) => {
   const projectId = req.params.id;
