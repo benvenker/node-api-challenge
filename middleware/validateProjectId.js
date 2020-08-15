@@ -4,8 +4,9 @@ module.exports = { validateProjectId };
 
 function validateProjectId() {
   return (req, res, next) => {
+    const id = req.body.project_id || req.params.id;
     projects
-      .get(req.body.project_id)
+      .get(id)
       .then(project => {
         if (project) {
           req.project = project;

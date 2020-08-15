@@ -1,5 +1,6 @@
 const express = require('express');
 const projects = require('../data/helpers/projectModel');
+const { validateProjectId } = require('../middleware/validateProjectId');
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get('/', (req, res) => {
 });
 
 // Get a project by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', validateProjectId(), (req, res) => {
   const id = req.params.id;
   return projects
     .get(id)
@@ -29,7 +30,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Get all the actiosn for a project
-router.get('/:id/actions', (req, res) => {
+router.get('/:id/actions', validateProjectId(), (req, res) => {
   const projectId = req.params.id;
   return projects
     .getProjectActions(projectId)
@@ -55,7 +56,7 @@ router.post('/', (req, res) => {
 });
 
 // Update an existing project
-router.put('/:id', (req, res) => {
+router.put('/:id', validateProjectId(), (req, res) => {
   const project = req.params.id;
   const changes = req.body;
 
@@ -70,7 +71,7 @@ router.put('/:id', (req, res) => {
 });
 
 // Delete an existing project
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateProjectId(), (req, res) => {
   const project = req.params.id;
 
   return projects
